@@ -7,17 +7,35 @@
 #include <vector>
 
 namespace realog {
+  struct NoArg {};
+
+  std::ostream &operator<<(std::ostream &stream, const NoArg& arg)
+  {
+    return stream;
+  }
+
   class Util
   {
   public:
     Util() = delete;
+
+    static void replaceAll(std::string &string, const std::string &replace, const std::string &with)
+    {
+      size_t pos = string.find(replace);
+
+      while (pos != std::string::npos)
+      {
+        string.replace(pos, replace.size(), with);
+        pos = string.find(replace, pos + with.size());
+      }
+    }
 
     template<typename... Args>
     static std::vector<std::string> convertArgsToStringVector(const Args&... args)
     {
       std::vector<std::string> vector;
 
-      iterate(vector, NULL, args...);
+      iterate(vector, NoArg(), args...);
 
       return vector;
     }
@@ -33,7 +51,7 @@ namespace realog {
     template<typename T>
     static void iterate(std::vector<std::string> &vector, T t)
     {
-      if (reinterpret_cast<const void*>(t) != NULL) {
+      if (!std::is_same<T, NoArg>::value) {
         std::stringstream stream;
         stream << t;
         vector.push_back(stream.str());
@@ -53,13 +71,13 @@ namespace realog {
     Logger &operator=(const Logger &other) = delete;
 
     template<typename... Args>
-    void info(const char* message, const Args&... args)
+    void info(const std::string &message, const Args&... args)
     {
       log(message, Util::convertArgsToStringVector(args...));
     }
 
   private:
-    void log(const char* message, const std::vector<std::string> &args)
+    void log(const std::string &message, const std::vector<std::string> &args)
     {
       time_t now = time(0);
       tm *ltm = localtime(&now);
@@ -74,24 +92,19 @@ namespace realog {
       << result << std::endl;
     }
 
-    std::string build(const char* message, const std::vector<std::string> &args)
+    std::string build(const std::string &message, const std::vector<std::string> &args)
     {
-      std::cout << "MESSAGE: " << message << std::endl;    
+      std::string result = message;
 
-      if (args.size() > 0) {
+      for (size_t i = 0; i < args.size(); ++i) {
         std::stringstream ss;
-
-        for (const std::string &arg : args) {
-          std::cout << arg << " ";
-        }
-
-        std::cout << std::endl;
+        ss << '{' << i << '}';
+        Util::replaceAll(result, ss.str(), args[i]);
       }
       
-      return message;
+      return result;
     }
 
-   
   private:
     std::string m_name;
   };
