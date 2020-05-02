@@ -20,3 +20,20 @@ Outputs
 ```shell
 [17:05:22] Realog: Number 40.2 times number 24 is 964.8
 ```
+
+### Levels
+```cpp
+  realog::Logger logger("MyLogger", realog::Level::INFO);
+  logger.log("Here is my info!");
+  logger.setLevel(realog::Level::WARN);
+  logger.log("Changed to warning!");
+  std::cout << "\n";
+  logger.trace("Show Trace");
+  logger.debug("Show Debug");
+  logger.info("Show Info");
+  logger.warn("Show Warning");
+  logger.error("Show Error");
+  logger.critical("Show Critical");
+```
+Outputs
+![Preview](https://github.com/derickfelix/Realog/blob/master/preview.png)
