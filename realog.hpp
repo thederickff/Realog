@@ -3,8 +3,45 @@
 
 #include <iostream>
 #include <ctime>
+#include <sstream>
+#include <vector>
 
 namespace realog {
+  class Util
+  {
+  public:
+    Util() = delete;
+
+    template<typename... Args>
+    static std::vector<std::string> convertArgsToStringVector(const Args&... args)
+    {
+      std::vector<std::string> vector;
+
+      iterate(vector, NULL, args...);
+
+      return vector;
+    }
+
+  private:
+    template<typename T, typename... Args>
+    static void iterate(std::vector<std::string> &vector, T first, const Args&... args)
+    {
+      if (reinterpret_cast<const void*>(first) != NULL) {
+        iterate(vector, first);
+      }
+
+      iterate(vector, args...);      
+    }
+
+    template<typename T>
+    static void iterate(std::vector<std::string> &vector, T t)
+    {
+      std::stringstream stream;
+      stream << t;
+      vector.push_back(stream.str());
+    }
+  };
+
   class Logger
   {
   public:
@@ -19,19 +56,16 @@ namespace realog {
     template<typename... Args>
     void info(const char* message, const Args&... args)
     {
-      
-
-      log(message, args...);
+      log(message, Util::convertArgsToStringVector(args...));
     }
 
   private:
-    template<typename... Args>
-    void log(const char* message, const Args&... args)
+    void log(const char* message, const std::vector<std::string> &args)
     {
       time_t now = time(0);
       tm *ltm = localtime(&now);
 
-      auto result = build(message, args...);
+      auto result = build(message, args);
 
       std::cout << "[" 
       << (ltm->tm_hour < 10 ? "0" : "") << ltm->tm_hour << ":" 
@@ -41,35 +75,22 @@ namespace realog {
       << result << std::endl;
     }
 
-    template<typename... Args>
-    std::string build(const char* message, const Args&... args)
+    std::string build(const char* message, const std::vector<std::string> &args)
     {
-      size_t numArgs = sizeof...(Args);
+      if (args.size() > 0) {
+        std::stringstream ss;
+        
+        for (const std::string &arg : args) {
+          std::cout << arg << " ";
+        }
 
-      if (numArgs > 0) {
-        recur(NULL, args...);
+        std::cout << std::endl;
       }
       
-      std::cout << std::endl;
-
       return message;
     }
 
-    template<typename T, typename... Args>
-    void recur(T first, const Args&... args)
-    {
-      if (reinterpret_cast<void*>(first) != NULL) {
-        recur(first);
-      }
-
-      recur(args...);      
-    }
-
-    template<typename T>
-    void recur(T t)
-    {
-      std::cout << t << " ";
-    }
+   
   private:
     std::string m_name;
   };
