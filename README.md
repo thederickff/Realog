@@ -6,23 +6,23 @@ Download the header and include on your project, or you can add this repository 
 
 ### Simple example
 ```cpp
-  realog::Logger logger("My Logger");
+  Realog::Logger logger("My Logger");
   logger.info("Hello my Logger!");
 ```
 Outputs: `[17:01:18] My Logger: Hello my Logger!`
 
 ### Variables
 ```cpp
-  realog::Logger logger;
+  Realog::Logger logger;
   logger.info("Number {0} times number {1} is {2}", 40.2, 24, 40.2 * 24);
 ```
 Outputs: `[17:05:22] Realog: Number 40.2 times number 24 is 964.8`
 
 ### Levels
 ```cpp
-  realog::Logger logger("MyLogger", realog::Level::INFO);
+  Realog::Logger logger("MyLogger", Realog::Level::INFO);
   logger.log("Here is my info!");
-  logger.setLevel(realog::Level::WARN);
+  logger.setLevel(Realog::Level::WARN);
   logger.log("Changed to warning!");
   std::cout << "\n";
   logger.trace("Show Trace");

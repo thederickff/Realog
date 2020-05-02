@@ -27,13 +27,13 @@ int main()
 {
   std::cout << "SIMPLE EXAMPLE\n";
   {
-    realog::Logger logger("My Logger");
+    Realog::Logger logger("My Logger");
     logger.log("Hello my Logger!");
   }
 
   std::cout << "\nVARIABLES EXAMPLE\n";
   {
-    realog::Logger logger;
+    Realog::Logger logger;
 
     logger.log("This is {0} triangle with {1} Custom {0} vars={1} * {2}", "A", 20, 40 * 20);
     
@@ -44,9 +44,9 @@ int main()
 
   std::cout << "\nCOLOR AND LEVELS\n";
   {
-    realog::Logger logger("MyLogger", realog::Level::INFO);
+    Realog::Logger logger("MyLogger", Realog::Level::INFO);
     logger.log("Here is my info!");
-    logger.setLevel(realog::Level::WARN);
+    logger.setLevel(Realog::Level::WARN);
     logger.log("Changed to warning!");
     std::cout << "\n";
     logger.trace("Show Trace");

@@ -29,7 +29,7 @@
 #include <sstream>
 #include <vector>
 
-namespace realog {
+namespace Realog {
   struct NoArg {};
 
   std::ostream &operator<<(std::ostream &stream, const NoArg& arg)
