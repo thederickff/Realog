@@ -36,4 +36,5 @@ Outputs
   logger.critical("Show Critical");
 ```
 Outputs
+
 ![Preview](https://github.com/derickfelix/Realog/blob/master/preview.png)
