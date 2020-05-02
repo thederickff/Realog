@@ -16,23 +16,59 @@ namespace realog {
     Logger(const Logger &other) = delete;
     Logger &operator=(const Logger &other) = delete;
 
-    void info(const char* message)
+    template<typename... Args>
+    void info(const char* message, const Args&... args)
     {
-      log(message);
+      
+
+      log(message, args...);
     }
 
   private:
-    void log(const char* message)
+    template<typename... Args>
+    void log(const char* message, const Args&... args)
     {
       time_t now = time(0);
       tm *ltm = localtime(&now);
+
+      auto result = build(message, args...);
 
       std::cout << "[" 
       << (ltm->tm_hour < 10 ? "0" : "") << ltm->tm_hour << ":" 
       << (ltm->tm_min < 10 ? "0" : "") << ltm->tm_min << ":" 
       << (ltm->tm_sec < 10 ? "0" : "") << ltm->tm_sec << "] " 
       << m_name << ": "
-      << message << std::endl;
+      << result << std::endl;
+    }
+
+    template<typename... Args>
+    std::string build(const char* message, const Args&... args)
+    {
+      size_t numArgs = sizeof...(Args);
+
+      if (numArgs > 0) {
+        recur(NULL, args...);
+      }
+      
+      std::cout << std::endl;
+
+      return message;
+    }
+
+    template<typename T, typename... Args>
+    void recur(T first, const Args&... args)
+    {
+      if (reinterpret_cast<void*>(first) != NULL) {
+        recur(first);
+      }
+
+      recur(args...);      
+    }
+
+    template<typename T>
+    void recur(T t)
+    {
+      std::cout << t << " ";
     }
   private:
     std::string m_name;
