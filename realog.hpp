@@ -26,19 +26,18 @@ namespace realog {
     template<typename T, typename... Args>
     static void iterate(std::vector<std::string> &vector, T first, const Args&... args)
     {
-      if (reinterpret_cast<const void*>(first) != NULL) {
-        iterate(vector, first);
-      }
-
+      iterate(vector, first);
       iterate(vector, args...);      
     }
 
     template<typename T>
     static void iterate(std::vector<std::string> &vector, T t)
     {
-      std::stringstream stream;
-      stream << t;
-      vector.push_back(stream.str());
+      if (reinterpret_cast<const void*>(t) != NULL) {
+        std::stringstream stream;
+        stream << t;
+        vector.push_back(stream.str());
+      }
     }
   };
 
@@ -77,14 +76,16 @@ namespace realog {
 
     std::string build(const char* message, const std::vector<std::string> &args)
     {
+      std::cout << "MESSAGE: " << message << std::endl;    
+
       if (args.size() > 0) {
         std::stringstream ss;
-        
+
         for (const std::string &arg : args) {
-          std::cout << arg << " ";
+          // std::cout << arg << " ";
         }
 
-        std::cout << std::endl;
+        // std::cout << std::endl;
       }
       
       return message;
