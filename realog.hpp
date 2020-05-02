@@ -82,10 +82,10 @@ namespace realog {
         std::stringstream ss;
 
         for (const std::string &arg : args) {
-          // std::cout << arg << " ";
+          std::cout << arg << " ";
         }
 
-        // std::cout << std::endl;
+        std::cout << std::endl;
       }
       
       return message;
