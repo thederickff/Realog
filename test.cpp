@@ -16,7 +16,7 @@ int main()
     
     logger.info("I {0} am {1} using {2} more {3} than {4} I {5} need", "_", 'A', 40.2 / 30, 10.0 / 3);
 
-    logger.info("Number {0} * {1} = {2}", 40.2, 24, 40.2 * 24);
+    logger.info("Number {0} times number {1} is {2}", 40.2, 24, 40.2 * 24);
   }
 
   return 0;
