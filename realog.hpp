@@ -32,7 +32,7 @@
 namespace Realog {
   struct NoArg {};
 
-  std::ostream &operator<<(std::ostream &stream, const NoArg& arg)
+  inline std::ostream &operator<<(std::ostream &stream, const NoArg& arg)
   {
     return stream;
   }
